@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Takasla - By Sinan</title>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#0a0a12;color:#fff;font-family:-apple-system,BlinkMacSystemFont,Arial,sans-serif;padding-bottom:90px}
+/* iPhone 17 Pro Max - Dynamic Island */
+.topbar{position:sticky;top:0;background:#0a0a12;padding:12px 16px;padding-top:env(safe-area-inset-top);z-index:99;border-bottom:1px solid #222}
+.logo{font-size:34px;font-weight:900;letter-spacing:-1px}
+.logo i{color:#a855f7;font-style:normal}
+.logo b{color:#22c55e}
+.sig{font-family:cursive;color:#e879f9;font-size:22px}
+.search{width:100%;padding:14px;border-radius:25px;border:1px solid #a855f7;background:#000;color:#fff;font-size:16px;margin:10px 0}
+.btn{border:none;border-radius:20px;padding:12px 16px;font-weight:800;cursor:pointer;font-size:15px}
+.green{background:#22c55e;color:#000}
+.purple{background:#a855f7;color:#fff}
+.wa{background:#25D366;color:#fff}
+.card{background:#15151f;border:1px solid #2a2a3a;border-radius:20px;padding:16px;margin:12px}
+.hero-title{font-size:32px;line-height:1.1;margin:0}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:12px}
+.product{background:#1a1a28;border:1px solid #a855f7;border-radius:18px;padding:12px;text-align:center}
+.product img{width:100%;border-radius:12px;height:120px;object-fit:cover}
+.badge{display:inline-block;padding:5px 10px;border-radius:20px;font-size:12px;font-weight:700;background:#222;border:1px solid #a855f7;margin:2px}
+input,select,textarea{width:100%;padding:13px;border-radius:14px;border:1px solid #333;background:#000;color:#fff;margin:7px 0;font-size:15px}
+.chat-b{max-width:85%;padding:11px 14px;border-radius:18px;margin:8px 0;font-size:15px}
+.left{background:#2a2a3a;border:1px solid #a855f7}
+.right{background:#22c55e;color:#000;margin-left:auto}
+.nav{position:fixed;bottom:0;left:0;right:0;background:#111;padding:10px;padding-bottom:env(safe-area-inset-bottom);display:flex;justify-content:space-around;border-top:1px solid #333}
+.nav button{background:none;border:none;color:#aaa;font-size:13px}
+.nav button.active{color:#22c55e;font-weight:800}
+.page{display:none}.page.active{display:block}
+footer{text-align:center;color:#888;padding:20px}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+<div style="display:flex;justify-content:space-between;align-items:center">
+<div><span class="logo">Takas<i>la</i> <b>•</b></span> <span class="sig">Sinan</span></div>
+<div style="font-size:12px;text-align:right">📍 <span id="konumText">İstanbul, Kadıköy</span><br>✅ By Sinan</div>
+</div>
+<input class="search" id="ara" placeholder="Ara: sneaker, hoodie, PlayStation, iPhone...">
+<div style="display:flex;gap:8px">
+<button class="btn green" onclick="bulKonum()">📍 Konumumu Bul</button>
+<button class="btn purple" onclick="showPage('ekle')">+ İlan Ekle</button>
+<a href="https://wa.me/009647759099295" style="flex:1"><button class="btn wa" style="width:100%">WhatsApp 009647759099295</button></a>
+</div>
+</div>
+
+<!-- ANA SAYFA -->
+<div id="page-home" class="page active">
+<div class="card">
+<h1 class="hero-title" style="color:#a855f7">Hemen Takasla,</h1>
+<h1 class="hero-title" style="color:#22c55e">Kolay ve Hızlı</h1>
+<p>İstediğin ürünü bul, konumuna en yakın takasları keşfet. İstanbul'da güvenli takas.</p>
+<p id="konumYazisi" style="color:#22c55e;font-weight:700">📍 Konum seçilmedi - Tüm İstanbul</p>
+<select id="ilce" onchange="filtrele()">
+<option value="all">Tüm İstanbul</option>
+<option>Kadıköy</option><option>Beşiktaş</option><option>Taksim</option><option>Üsküdar</option><option>Bakırköy</option>
+</select>
+<div style="display:flex;gap:8px;margin-top:8px">
+<span class="badge">👟 Sneakers</span><span class="badge">🧥 Streetwear</span><span class="badge">🎮 Gaming</span><span class="badge">📱 Telefon</span>
+</div>
+</div>
+<h2 style="padding:0 16px">Öne Çıkan Takaslar</h2>
+<div class="grid" id="urunListesi"></div>
+<div class="card" style="text-align:center">
+<h3>GÜNLÜK TAKAS <span style="color:#22c55e">1.200+ Aktif Takas</span></h3>
+<p>ANINDA EŞLEŞME - Saniyeler İçinde</p>
+<p style="font-family:cursive;font-size:28px;color:#e879f9;margin:0">— Sinan —</p>
+<p>By Sinan - Web Developer</p>
+</div>
+</div>
+
+<!-- EKLE -->
+<div id="page-ekle" class="page">
+<div class="card">
+<h2>Yeni Ürün Ekle</h2>
+<label>Fotoğraf Ekle (iPhone 17 Pro Max 48MP)</label>
+<input type="file" accept="image/*" id="fotoInput">
+<input id="urunAd" placeholder="Ürün Adı - Örn: Nike Air Max 270">
+<select id="urunKat"><option>Sneakers</option><option>Streetwear - Hoodie</option><option>Gaming</option><option>Telefon</option><option>Futbol Forması</option></select>
+<input id="urunFiyat" placeholder="Fiyat - Örn: 850₺ veya Takas">
+<select id="urunTur"><option>Takas</option><option>Satılık</option><option>Takas + Nakit</option></select>
+<input id="urunIlce" placeholder="Konum - Örn: Kadıköy, İstanbul">
+<textarea id="urunAcik" placeholder="Açıklama - Beden, durum, ne ile takas istersin?"></textarea>
+<button class="btn green" style="width:100%" onclick="urunEkle()">✅ Yayına Al - Yayınla</button>
+<p style="font-size:13px;color:#aaa">İlanın yayınlanınca WhatsApp'ına bildirim gelecek: 009647759099295</p>
+</div>
+</div>
+
+<!-- MESAJLAR -->
+<div id="page-mesaj" class="page">
+<div class="card">
+<h3>Sinan • çevrimiçi • Kadıköy</h3>
+<div style="display:flex;gap:8px;background:#000;padding:10px;border-radius:14px;border:1px solid #a855f7">
+<div style="flex:1;text-align:center"><b style="color:#a855f7">SENİN TEKLİFİN</b><br>👟 Nike Air Force 1<br>42 numara</div>
+<div style="font-size:28px">🔄</div>
+<div style="flex:1;text-align:center"><b style="color:#22c55e">SİNAN'IN TEKLİFİ</b><br>🧥 Oversized Hoodie<br>L beden</div>
+</div>
+<div class="chat-b left">Selam! Sneaker takas işi hala geçerli mi? Hoodie tertemiz, 1-2 kez giydim sadece.</div>
+<div class="chat-b right">Evet geçerli! Hoodie temiz görünüyor 👍 Benim sneaker da neredeyse yeni, kutusu da mevcut.</div>
+<div class="chat-b left">Süper! Peki bedenler uyuyor mu? Ben L giyiyorum, senin sneaker 42 doğru mu?</div>
+<div class="chat-b right">Evet 42 tam. Takas yapalım mı?</div>
+<div class="card" style="margin:8px 0;padding:10px">📍 Buluşma noktası: Kadıköy, Moda Sahili - Sahil Parkı girişi<br>Burası kalabalık ve güvenli, uygun mu?</div>
+<input id="mesajInput" placeholder="Mesaj yaz...">
+<button class="btn green" style="width:100%" onclick="mesajGonder()">Gönder</button>
+<div style="display:flex;gap:8px;margin-top:10px">
+<button class="btn purple" style="flex:1">Teklifi Düzenle</button>
+<button class="btn green" style="flex:1" onclick="alert('Takas kabul edildi! Sinan ile WhatsApp üzerinden buluşma ayarlayın.')">✅ Takası Kabul Et</button>
+</div>
+</div>
+</div>
+
+<!-- PROFİL -->
+<div id="page-profil" class="page">
+<div class="card" style="text-align:center">
+<div style="width:90px;height:90px;border-radius:50%;background:linear-gradient(135deg,#a855f7,#22c55e);margin:auto;display:flex;align-items:center;justify-content:center;font-size:40px">S</div>
+<h2>Sinan</h2>
+<p>Web Developer • İstanbul</p>
+<p>⭐ 4.8 • 62 Değerlendirme</p>
+<p>12 İlanım • 34 Takas Geçmişi • %96 Yanıt Oranı</p>
+<a href="https://wa.me/009647759099295"><button class="btn wa" style="width:100%">WhatsApp İletişim - 009647759099295</button></a>
+<p style="font-family:cursive;font-size:30px;color:#e879f9">— Sinan —</p>
+</div>
+<h3 style="padding:0 16px">İlanlarım</h3>
+<div class="grid" id="profilUrunler"></div>
+</div>
+
+<div class="nav">
+<button class="active" onclick="showPage('home',this)">🏠<br>Keşfet</button>
+<button onclick="showPage('ekle',this)">➕<br>Ekle</button>
+<button onclick="showPage('mesaj',this)">💬<br>Mesajlar</button>
+<button onclick="showPage('profil',this)">👤<br>Profil</button>
+</div>
+
+<footer>Takasla © 2026 • İstanbul • By Sinan - Web Developer<br>WhatsApp: 009647759099295</footer>
+
+<script>
+let urunler = [
+{ad:"Nike Air Max 270", fiyat:"Takas / 850₺", ilce:"Beşiktaş", km:"2.3km", img:"https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=500", kat:"Sneakers"},
+{ad:"Oversize Hoodie Neon", fiyat:"Takas / 400₺", ilce:"Kadıköy", km:"1.1km", img:"https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=500", kat:"Streetwear"},
+{ad:"PlayStation 5 + 1 Kol", fiyat:"Takas / 9000₺", ilce:"Taksim", km:"3.0km", img:"https://images.unsplash.com/photo-1606813907291-d86efa9b94db?w=500", kat:"Gaming"},
+{ad:"iPhone 13 - 128GB", fiyat:"Takas / 18500₺", ilce:"Kadıköy", km:"0.8km", img:"https://images.unsplash.com/photo-1592750475338-74b7b21085ab?w=500", kat:"Telefon"},
+{ad:"Galatasaray Forması", fiyat:"Takas / 1200₺", ilce:"Üsküdar", km:"4.2km", img:"https://images.unsplash.com/photo-1522778119026-d647f0596c20?w=500", kat:"Futbol"},
+{ad:"Jordan 1 Retro", fiyat:"Takas / 3200₺", ilce:"Beşiktaş", km:"1.9km", img:"https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?w=500", kat:"Sneakers"},
+];
+function render(){
+let html = "";
+urunler.forEach((u,i)=>{
+html += `<div class="product" data-ilce="${u.ilce}"><img src="${u.img}"><h3 style="font-size:15px">${u.ad}</h3><p>📍 ${u.ilce} • ${u.km}</p><p style="color:#22c55e;font-weight:800">${u.fiyat}</p><button class="btn green" style="width:100%" onclick="takasTeklif('${u.ad}')">Takas Teklifi Gönder</button></div>`;
+});
+document.getElementById('urunListesi').innerHTML = html;
+document.getElementById('profilUrunler').innerHTML = html;
+}
+render();
+function showPage(id,btn){
+document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+document.getElementById('page-'+id).classList.add('active');
+document.querySelectorAll('.nav button').forEach(b=>b.classList.remove('active'));
+if(btn) btn.classList.add('active');
+window.scrollTo(0,0);
+}
+function bulKonum(){
+if(navigator.geolocation){
+navigator.geolocation.getCurrentPosition(function(pos){
+document.getElementById('konumYazisi').innerText = "📍 Konumun bulundu! Sana en yakın takaslar gösteriliyor - " + pos.coords.latitude.toFixed(2) + ", " + pos.coords.longitude.toFixed(2);
+document.getElementById('konumText').innerText = "Yakınında";
+alert("Konumun bulundu! iPhone 17 Pro Max GPS ile en yakın takaslar gösteriliyor.");
+}, function(){ alert("Konum izni vermen lazım."); });
+} else { alert("Cihaz konum desteklemiyor."); }
+}
+function filtrele(){
+let sec = document.getElementById('ilce').value;
+document.querySelectorAll('.product').forEach(u=>{
+u.style.display = (sec==='all' || u.dataset.ilce===sec) ? 'block' : 'none';
+});
+}
+function takasTeklif(urun){
+window.open("https://wa.me/009647759099295?text=Merhaba Sinan, " + encodeURIComponent(urun) + " için takas teklifi göndermek istiyorum!", "_blank");
+}
+function urunEkle(){
+let ad = document.getElementById('urunAd').value;
+if(!ad){ alert("Ürün adı yazman lazım!"); return; }
+urunler.unshift({ad:ad, fiyat:document.getElementById('urunFiyat').value || "Takas", ilce:document.getElementById('urunIlce').value || "Kadıköy", km:"0.5km", img:"https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=500", kat:document.getElementById('urunKat').value});
+render(); showPage('home'); alert("İlanın yayınlandı! Tebrikler Sinan 🔥");
+}
+function mesajGonder(){
+let m = document.getElementById('mesajInput').value;
+if(m){ alert("Mesajın gönderildi: " + m); document.getElementById('mesajInput').value=""; }
+}
+document.getElementById('ara').addEventListener('input', function(){
+let k = this.value.toLowerCase();
+document.querySelectorAll('.product').forEach(u=>{ u.style.display = u.innerText.toLowerCase().includes(k) ? 'block' : 'none'; });
+});
+</script>
+</body>
+</html>
